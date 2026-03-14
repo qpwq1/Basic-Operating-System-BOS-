@@ -29,9 +29,10 @@ mem(write 0x1=0000000000000000);	在地址0x1写入0000000000000000
 文件系统	null null
 FS_READ("bbb.txt");	读叫做bbb.txt的文件
 FS_WRITE("bbb.txt",<文件内容，一般是DATAURL>);	写bbb.txt文件为XXX
-FS_LIST	列出目录
-进程	PROC_START	启动应用
-PROC_KILL	终止进程
+FS_LIST	列出文件系统目录
+进程	
+RET(START BBB.html -BBB -0);  启动程序BBB.html，ID位BBB，并以权限0运行
+RET(DELETE -BBB);	终止BBB进程
 PROC_LIST	列出进程
 PROC_SEND	进程间通信
 系统	SYS_INFO	获取系统信息
