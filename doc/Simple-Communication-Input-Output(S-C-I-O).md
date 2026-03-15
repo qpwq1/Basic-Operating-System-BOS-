@@ -21,7 +21,7 @@ iframe 应用 → 内核：parent.postMessage()
 
 支持的系统调用
 类别	指令	功能
-内存	null  null
+内存	null  null                                                                              
 mem(new bbb=0x1&0x3);	申请一块内存块句柄叫bbb,地址0x1到0x3
 mem(delete <bbb>);	释放句柄为bbb的所有内存块
 mem(read bbb:0x1);	读取bbb的地址0x1的内存
