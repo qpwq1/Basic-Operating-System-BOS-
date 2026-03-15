@@ -31,8 +31,10 @@ FS_READ("bbb.txt");	读叫做bbb.txt的文件
 FS_WRITE("bbb.txt",<文件内容，一般是DATAURL>);	写bbb.txt文件为XXX
 FS_LIST	列出文件系统目录
 进程	
-RET(START BBB.html -BBB -0);  启动程序BBB.html，ID位BBB，并以权限0运行
-RET(DELETE -BBB);	终止BBB进程
-PROC_LIST	列出进程
-PROC_SEND	进程间通信
-系统	SYS_INFO	获取系统信息
+PM(START BBB.html -BBB -0);  启动程序BBB.html，ID位BBB，并以权限0运行
+PM(DELETE -BBB);	终止BBB进程
+PM(LIST);	列出进程
+PM(LIST BBB);  进程BBB是否存在
+PM (send -"Hello" BBB)	向BBB进程发送Hello
+系统  null null
+SYS(INFO);	获取系统信息
