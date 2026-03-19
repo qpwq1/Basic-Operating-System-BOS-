@@ -1,3 +1,5 @@
+//BOS文件选择
+
 (function (Scratch) {
   "use strict";
 
