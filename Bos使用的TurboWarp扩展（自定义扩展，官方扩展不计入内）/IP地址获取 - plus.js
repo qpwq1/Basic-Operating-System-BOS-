@@ -1,5 +1,4 @@
 // IP地址工具箱 - 完全版
-// 合并了plus版的丰富功能和普通版的稳定性
 (function(Scratch) {
     'use strict';
 
