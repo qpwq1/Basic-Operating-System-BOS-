@@ -1,6 +1,4 @@
 // Name: BOS Iframe (真实浏览器模式 v6 - 完整版)
-// ID: bosIframeV6
-// 专为BOS内核设计: 真实浏览器体验 + 动态HTML完美支持 + 消息接收增强 + 进程消息概览
 
 (function (Scratch) {
   "use strict";
