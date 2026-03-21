@@ -27,7 +27,7 @@ iframe 应用 → 内核：parent.postMessage()
 内核 → 应用：window.addEventListener('message')
 iframe 应用与 BOS 内核运行在不同的 JavaScript 执行环境中。postMessage 是浏览器提供的唯一安全跨域通信方式。内核监听所有消息，根据 SCIO 格式解析并执行，然后将结果原路返回。
 为什么不直接用变量共享？
-因为 iframe 有严格的安全隔离，不能直接访问内核的变量或函数。postMessage 是浏览器允许的“唯一通道”。
+因为 iframe 有严格的安全隔离，不能直接访问内核的变量或函数。postMessage 是浏览器允许的“唯一通道”。详细见[LICENSE](./Bos使用的TurboWarp扩展（自定义扩展，官方扩展不计入内/iframe-BOS(SCIO).js
 
 5. 握手协议
 发起方 接收方	消息	含义
