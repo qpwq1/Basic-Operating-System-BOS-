@@ -278,17 +278,17 @@ PM(send ...);
 
 ERR [错误码] [可选描述]
 
-常见错误码：
+错误码：
 
-· ERR_NO_MEM：内存不足
-
-· ERR_NO_FILE：文件不存在
-
-· ERR_NO_PROC：进程不存在
-
-· ERR_PERM：权限不足
-
-· ERR_FORMAT：指令格式错误
+· ERROR_NO_MEM ：内存不足
+· ERROR_MEMNAME : 内存ID重复/无效
+· ERROR_NO_MEMBIG : 所选择的内存区域被占用
+· ERROR_MEM_MEMCTL ：内存越界访问
+· ERROR_NO_FILE：文件不存在
+· ERROR_NO_PROC：进程不存在
+· ERROR_PERM：权限不足
+· ERROR_FORMAT：指令格式错误
+· ERROR_SCIO_PROCTIME ：握手超时
 
 
 安全性
