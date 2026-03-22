@@ -1,0 +1,2 @@
+*.sb3 linguist-language=Scratch
+docs/*.html linguist-language=HTML
