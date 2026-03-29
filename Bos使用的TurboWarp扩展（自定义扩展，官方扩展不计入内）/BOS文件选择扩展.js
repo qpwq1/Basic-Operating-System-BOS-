@@ -259,28 +259,34 @@
       }
     }
 
-    // 格式化文件大小 - 修改为统一显示KB
     formatFileSize(bytes) {
       if (bytes === 0) return "0 KB";
+      if (!bytes || isNaN(bytes)) return "0 KB";
       
-      // 统一转换为KB
       const sizeInKB = bytes / 1024;
       
-      // 处理非常小的文件 - 显示6位小数
-      if (sizeInKB < 0.01) {
-        // 确保显示6位小数
-        const fixedSize = sizeInKB.toFixed(6);
-        // 移除末尾多余的0
-        return parseFloat(fixedSize).toString() + " KB";
+      if (sizeInKB < 0.001) {
+        return "<0.001 KB";
       }
       
-      // 根据大小决定小数位数
-      // 小于10KB：保留2位小数
-      // 10KB到100KB之间：保留1位小数
-      // 大于等于100KB：保留0位小数（整数）
-      const decimalPlaces = sizeInKB < 10 ? 2 : sizeInKB < 100 ? 1 : 0;
-      
-      return `${sizeInKB.toFixed(decimalPlaces)} KB`;
+      if (sizeInKB < 1) {
+        return sizeInKB.toFixed(3) + " KB";
+      } else if (sizeInKB < 10) {
+        return sizeInKB.toFixed(2) + " KB";
+      } else if (sizeInKB < 100) {
+        return sizeInKB.toFixed(1) + " KB";
+      } else if (sizeInKB < 1000) {
+        return Math.round(sizeInKB) + " KB";
+      } else {
+        const sizeInMB = bytes / (1024 * 1024);
+        if (sizeInMB < 10) {
+          return sizeInMB.toFixed(2) + " MB";
+        } else if (sizeInMB < 100) {
+          return sizeInMB.toFixed(1) + " MB";
+        } else {
+          return Math.round(sizeInMB) + " MB";
+        }
+      }
     }
 
     fileToDataURL(file) {
@@ -305,7 +311,11 @@
         media.onloadedmetadata = () => {
           const duration = media.duration;
           URL.revokeObjectURL(objectURL);
-          resolve(`${duration.toFixed(1)} 秒`);
+          if (isNaN(duration)) {
+            resolve("无法获取时长");
+          } else {
+            resolve(`${duration.toFixed(1)} 秒`);
+          }
         };
         
         media.onerror = () => {
@@ -397,21 +407,30 @@
   }
 
   // 包装异步方法以确保返回字符串
-  const originalMethods = {
-    getFileInfo: FileOperations.prototype.getFileInfo,
-    readFileContent: FileOperations.prototype.readFileContent,
-    getMediaDuration: FileOperations.prototype.getMediaDuration,
-    getMediaDimensions: FileOperations.prototype.getMediaDimensions
-  };
-
+  const originalGetFileInfo = FileOperations.prototype.getFileInfo;
   FileOperations.prototype.getFileInfo = function(args) {
-    const result = originalMethods.getFileInfo.call(this, args);
-    return result instanceof Promise ? result.then(value => value || "").catch(() => "") : result;
+    const result = originalGetFileInfo.call(this, args);
+    if (result instanceof Promise) {
+      return result.then(value => {
+        if (value === undefined || value === null) return "";
+        return String(value);
+      }).catch(() => "");
+    }
+    if (result === undefined || result === null) return "";
+    return String(result);
   };
 
+  const originalReadFileContent = FileOperations.prototype.readFileContent;
   FileOperations.prototype.readFileContent = function(args) {
-    const result = originalMethods.readFileContent.call(this, args);
-    return result instanceof Promise ? result.then(value => value || "").catch(() => "") : result;
+    const result = originalReadFileContent.call(this, args);
+    if (result instanceof Promise) {
+      return result.then(value => {
+        if (value === undefined || value === null) return "";
+        return String(value);
+      }).catch(() => "");
+    }
+    if (result === undefined || result === null) return "";
+    return String(result);
   };
 
   Scratch.extensions.register(new FileOperations());
