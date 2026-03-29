@@ -1,10 +1,9 @@
-// 框选框扩展 - BOS定制版
-// 原作者：B站10000why（遵循二创许可）
-// BOS改编：添加主题色、修复BUG、增加实用积木
+// 框选框扩展 - BOS定制版（修复版）
+// 修复内容：确保舞台就绪、动态绑定事件、坐标转换容错、样式默认值保护、边界检查健壮性
 
 (function (Scratch) {
   'use strict';
-  
+
   if (!(Scratch && Scratch.extensions && Scratch.extensions.register)) {
     throw new Error('请在 TurboWarp 扩展环境中加载。');
   }
@@ -23,16 +22,35 @@
   const STAGE_W = 480;
   const STAGE_H = 360;
 
-  // ====== VM/Renderer 获取（带容错）======
+  // ====== VM/Renderer 获取（带容错与等待）======
   const getVM = () => Scratch.vm || (Scratch.runtime && Scratch.runtime.vm);
   const getRuntime = () => getVM()?.runtime || null;
   const getRenderer = () => getRuntime()?.renderer || null;
   const getStageCanvas = () => getRenderer()?.canvas || null;
-  
+
+  // 等待舞台就绪（用于异步初始化）
+  function waitForStageReady() {
+    return new Promise((resolve) => {
+      const check = () => {
+        const canvas = getStageCanvas();
+        if (canvas && canvas.parentElement) {
+          resolve(canvas);
+        } else {
+          setTimeout(check, 50);
+        }
+      };
+      check();
+    });
+  }
+
   function getStageHost() {
     const canvas = getStageCanvas();
     if (!canvas) return null;
-    const host = canvas.parentElement || canvas;
+    let host = canvas.parentElement;
+    while (host && !host.classList?.contains('stage-wrapper') && host !== document.body) {
+      host = host.parentElement;
+    }
+    if (!host) host = canvas.parentElement || canvas;
     host.style.position ||= 'relative';
     return host;
   }
@@ -50,8 +68,9 @@
     const canvas = getStageCanvas();
     if (!canvas) return { x: 0, y: 0 };
     const rect = canvas.getBoundingClientRect();
-    const nx = (clientX - rect.left) / rect.width;
-    const ny = (clientY - rect.top) / rect.height;
+    // 确保坐标在画布范围内
+    const nx = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    const ny = Math.min(1, Math.max(0, (clientY - rect.top) / rect.height));
     return {
       x: nx * STAGE_W - STAGE_W / 2,
       y: STAGE_H / 2 - ny * STAGE_H
@@ -111,8 +130,9 @@
     cornerBase: 4
   };
 
-  // 确保覆盖层存在
-  function ensureOverlay() {
+  // 确保覆盖层存在（异步等待舞台）
+  async function ensureOverlay() {
+    await waitForStageReady(); // 等待舞台就绪
     const host = getStageHost();
     if (!host) return;
     if (overlay) return;
@@ -159,6 +179,7 @@
 
     rectEl.setAttribute('stroke', `rgb(${sRGB.r},${sRGB.g},${sRGB.b})`);
     rectEl.setAttribute('fill', `rgb(${fRGB.r},${fRGB.g},${fRGB.b})`);
+    // 透明度：值越小越透明，这里直接使用设置值（0=不透明，1=全透明）
     rectEl.setAttribute('stroke-opacity', String(1 - Math.min(1, Math.max(0, styleState.strokeAlpha))));
     rectEl.setAttribute('fill-opacity', String(1 - Math.min(1, Math.max(0, styleState.fillAlpha))));
     rectEl.setAttribute('stroke-width', String(Math.max(0.1, styleState.strokeWidthBase * scale)));
@@ -176,7 +197,6 @@
 
   // 绘制矩形
   function drawBox(rect) {
-    ensureOverlay();
     if (!overlay || !svgEl || !rectEl || !rect) return;
 
     const host = getStageHost();
@@ -207,7 +227,7 @@
     if (lastRect) drawBox(lastRect);
   }
 
-  // 更新选中的角色
+  // 更新选中的角色（改进边界检查）
   function refreshSelection(rect) {
     selection.clear();
     if (!rect) return;
@@ -217,14 +237,24 @@
 
     for (const target of runtime.targets) {
       if (!target || target.isStage) continue;
-      const bounds = target.getBounds?.();
+      // 获取角色边界（带容错）
+      let bounds = null;
+      try {
+        bounds = target.getBounds?.();
+      } catch(e) {}
       if (!bounds) continue;
 
+      // 边界值可能为undefined，确保是数字
+      const left = bounds.left ?? -Infinity;
+      const right = bounds.right ?? Infinity;
+      const top = bounds.top ?? Infinity;
+      const bottom = bounds.bottom ?? -Infinity;
+
       // 检查边界框是否与矩形相交
-      const hit = !(bounds.right < rect.left ||
-                    bounds.left > rect.right ||
-                    bounds.top < rect.bottom ||
-                    bounds.bottom > rect.top);
+      const hit = !(right < rect.left ||
+                    left > rect.right ||
+                    top < rect.bottom ||
+                    bottom > rect.top);
       if (hit) {
         const name = target.getName?.() || target.sprite?.name || '';
         if (name) selection.add(name);
@@ -246,14 +276,18 @@
     return names.length ? names : ['无角色'];
   }
 
-  // ====== 鼠标事件处理（修复：动态添加/移除监听）======
+  // ====== 鼠标事件处理（动态添加/移除监听，确保绑定正确宿主）======
   let mouseListenersAttached = false;
 
   function attachMouseHandlers() {
     if (mouseListenersAttached) return;
 
     const host = getStageHost();
-    if (!host) return;
+    if (!host) {
+      // 如果宿主还未就绪，延迟重试
+      setTimeout(() => attachMouseHandlers(), 100);
+      return;
+    }
 
     const onMouseDown = (e) => {
       if (!overlayActive || e.button !== 0) return;
@@ -487,9 +521,9 @@
       return allSpriteNames().map(name => ({ text: name, value: name }));
     }
 
-    // 启用/禁用鼠标框选
-    enableMarquee(args) {
-      ensureOverlay();
+    // 启用/禁用鼠标框选（异步等待舞台）
+    async enableMarquee(args) {
+      await ensureOverlay(); // 确保覆盖层已创建
       overlayActive = String(args.STATE) === '开';
       if (overlayActive) {
         attachMouseHandlers();
@@ -503,9 +537,9 @@
     }
 
     // 手动创建框选矩形
-    createBox(args) {
-      ensureOverlay();
-      attachMouseHandlers(); // 确保事件存在（但不会重复）
+    async createBox(args) {
+      await ensureOverlay();
+      attachMouseHandlers(); // 确保事件存在（不会重复）
       const left = Number(args.L) || 0;
       const right = Number(args.R) || 0;
       const bottom = Number(args.B) || 0;
@@ -544,63 +578,49 @@
     boxWidth()  { return lastRect ? lastRect.width : 0; }
     boxHeight() { return lastRect ? lastRect.height : 0; }
 
-    // 样式设置
+    // 样式设置（同步更新）
     setStrokeColor(args) {
-      ensureOverlay();
       styleState.strokeColor = args.COLOR || BOS_COLORS.primary;
       applyStyleToRect();
       redraw();
     }
     setFillColor(args) {
-      ensureOverlay();
       styleState.fillColor = args.COLOR || BOS_COLORS.secondary;
       applyStyleToRect();
       redraw();
     }
     setStrokeAlpha(args) {
-      ensureOverlay();
       styleState.strokeAlpha = Math.min(1, Math.max(0, Number(args.A) / 100));
       applyStyleToRect();
       redraw();
     }
     setFillAlpha(args) {
-      ensureOverlay();
       styleState.fillAlpha = Math.min(1, Math.max(0, Number(args.A) / 100));
       applyStyleToRect();
       redraw();
     }
     setStrokeWidth(args) {
-      ensureOverlay();
       styleState.strokeWidthBase = Math.max(0, Number(args.W) || 0);
       applyStyleToRect();
       redraw();
     }
     setDash(args) {
-      ensureOverlay();
       styleState.dashLenBase = Math.max(0, Number(args.LEN) || 0);
       styleState.dashGapBase = Math.max(0, Number(args.GAP) || 0);
       applyStyleToRect();
       redraw();
     }
     setCornerRadius(args) {
-      ensureOverlay();
       styleState.cornerBase = Math.max(0, Number(args.R) || 0);
       applyStyleToRect();
       redraw();
     }
   }
 
-  // 初始化（但不自动启用，避免干扰）
-  ensureOverlay();
-
-  Scratch.extensions.register(new BOSMarqueeExtension());
-
-  // 项目结束时清理监听器
-  const originalDispose = Scratch.vm?.runtime?._dispose;
-  if (originalDispose) {
-    Scratch.vm.runtime._dispose = function() {
-      detachMouseHandlers();
-      originalDispose.call(this);
-    };
-  }
+  // 延迟注册扩展，避免抢占资源
+  setTimeout(() => {
+    // 先初始化覆盖层（异步等待舞台）
+    ensureOverlay().catch(console.warn);
+    Scratch.extensions.register(new BOSMarqueeExtension());
+  }, 0);
 })(Scratch);
