@@ -50,6 +50,6 @@ TurboWarp Desktop 或 TurboWarp网页版（turbowarp.org）
 
 👤 关于作者
 12 岁，喜欢折腾代码，从 Scratch 游戏到 C++ 再到自己写模拟操作系统。
-BOS 是他 2026 年的主要玩具。
 计划使用C++重写BOS
 [早期SCIO 协议设想](https://www.bilibili.com/opus/1164306032705404933)
+[比较正式的SCIO 协议设想](https://www.bilibili.com/opus/1187999017941860372)
