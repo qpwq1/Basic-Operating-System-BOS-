@@ -1,60 +1,56 @@
-Basic Operating System (BOS) – A simple operating system kernel prototype running on TurboWarp
+BOS UP — Unusual Perfect Kernel
 
-🧩 Current Status
+BOS UP is an operating system kernel prototype running on TurboWarp. It features complete memory management, process management, a file system, system calls, and a scripting language (BM), along with a simple yet extensible messaging protocol (SCIO).
 
-File System: List-based virtual file system (works, but has bugs being fixed)
+Current code (blocks): approx. 1,400 (kernel)
 
-Memory Management: Indexed memory access
+Kernel Features (.UP1.0)
 
-Process Management: Prototype
+Module | Status | Description
+MEM | ✅ Stable | Word-addressed (16-bit), dynamic allocation/free, handle-based memory management
+PM | ✅ Stable | Process start/termination, SID/PID identifiers, SEND communication
+FS | ✅ Stable | Cluster-based virtual file system (Base64 + hexadecimal storage)
+SYS | ✅ Stable | System calls (INFO, BIN, SHUTDOWN, etc.)
+CPU | ✅ Stable | ADD/SUB, AND/OR/NOT, base conversion (CONVERT)
+GPU | ⚠️ Basic | Dual-color framebuffer operations (240×180), independent addressing
+BM | ✅ Fairly stable | Native BOS scripting language with system call support; future additions include JUMP, nested instructions, comments, and direct execution of .bm files
+SCIO | ✅ Stable | Simple I/O protocol, message routing, and interpreter integration
 
-Independently developed by a 12-year-old, the current code consists of about 2000 Scratch blocks (though the number may have changed by the time you read this).
+Design Philosophy
 
-💻 System Features
+Microkernel / hybrid kernel style: The kernel only handles core tasks (memory, processes, files, system calls). UI and applications are left to distributions.
 
-Appears as a 16-bit system (16-bit memory addressing)
+Namespaces: BM::MEM, BM::PM, ... with future support for third-party namespaces (e.g., JS::...(?)).
 
-Memory: 64 KB (one 16-bit memory module)
+Script-driven: System calls and automation are primarily done via BM scripts rather than hard-coded blocks.
 
-CPU: Built-in system CPU (simulated by TurboWarp)
+Asynchronous messages: SCIO serves as the sole kernel entry point, responsible for routing and interpreter scheduling.
 
-Hard Disk: Approximately 1 MB (approaching TurboWarp list limits, may not reach this size)
+Runtime Environment
 
-⚠️ Configuration for reference only, please refer to actual operation.
+TurboWarp Desktop or TurboWarp Web (https://turbowarp.org)
 
-📌 Detailed Introduction
-BOS is an operating system built with Scratch blocks, running in TurboWarp.
-It was created to understand "how an operating system actually works" – hence this buggy but functional toy kernel.
+Load the .sb3 or .sprite3 file to run.
 
-Currently you can:
+Basic BM Examples
 
-Read and write files (though paths may occasionally be missing)
+// Memory allocation and write
+BM::MEM(NEW buf = SIZE(10));
+BM::MEM(WRITE buf:0x0 = FF);
 
-Allocate and free memory (but be careful not to exceed limits)
+// Additional system library
+BM::SYS(INFO);
 
-Experience the retro feel of a 16-bit system
+// Process communication
+BM::PM(START game.html -mygame -1);
+BM::PM(SEND "hello" -mygame);
 
-If you're curious about operating system internals or want to see what a 12-year-old can create, feel free to take a look.
-Of course, the code contains many pitfalls, but each one was personally created by me, and I'm personally fixing them.
+// Base conversion
+BM::CPU(CONVERT 16, 10, FF);
 
-🔧 Next Steps
+Articles I've written:
 
-Continue exploring process management
+Early SCIO protocol concept (https://www.bilibili.com/opus/1164306032705404933)
 
-📦 Running Environment
-
-TurboWarp Desktop or TurboWarp online (turbowarp.org)
-
-Load the project file to run
-
-📜 License
-This project is licensed under GPL 3.0
-For details, see the LICENSE file.
-
-👤 About the Author
-12 years old, enjoys tinkering with code, from Scratch games to C++ to writing a simulated operating system.
-BOS is my main toy in 2026.
-Planning to rewrite BOS in C++
-SCIO protocol concept
-
-//翻译器翻译的真差
+More formal SCIO protocol concept (https://www.bilibili.com/opus/1187999017941860372)
+//翻译器翻译的就是这样了，我是中国人
