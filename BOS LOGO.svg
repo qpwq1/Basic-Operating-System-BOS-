@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 220" width="480" height="220">
+  <!-- 蓝色背景 -->
+  <rect x="0" y="0" width="480" height="220" rx="28" fill="#0068B5" />
+  
+  <!-- 左侧芯片图形 -->
+  <g transform="translate(38, 54.4)">
+    <line x1="0" y1="20" x2="150" y2="20" stroke="white" stroke-width="3.5" stroke-linecap="round" />
+    <line x1="0" y1="50" x2="150" y2="50" stroke="white" stroke-width="3.5" stroke-linecap="round" />
+    <line x1="0" y1="80" x2="150" y2="80" stroke="white" stroke-width="3.5" stroke-linecap="round" />
+    <circle cx="75" cy="80" r="18" fill="none" stroke="white" stroke-width="3.5" />
+  </g>
+  
+  <!-- 右侧文字组 -->
+  <g transform="translate(250, 52)">
+    <text x="0" y="90" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="92" font-weight="700" fill="white" letter-spacing="8">BOS</text>
+    <text x="0" y="140" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="16" font-weight="400" fill="white" opacity="0.9">Basic Operating System</text>
+    <!-- 线长缩短至 215，右端坐标 465，在蓝色背景内（右边界480） -->
+    <line x1="0" y1="152" x2="215" y2="152" stroke="white" stroke-width="1.5" />
+  </g>
+</svg>
