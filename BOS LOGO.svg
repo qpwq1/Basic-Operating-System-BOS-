@@ -1,20 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 220" width="480" height="220">
-  <!-- 蓝色背景 -->
-  <rect x="0" y="0" width="480" height="220" rx="28" fill="#0068B5" />
-  
-  <!-- 左侧芯片图形 -->
-  <g transform="translate(38, 54.4)">
-    <line x1="0" y1="20" x2="150" y2="20" stroke="white" stroke-width="3.5" stroke-linecap="round" />
-    <line x1="0" y1="50" x2="150" y2="50" stroke="white" stroke-width="3.5" stroke-linecap="round" />
-    <line x1="0" y1="80" x2="150" y2="80" stroke="white" stroke-width="3.5" stroke-linecap="round" />
-    <circle cx="75" cy="80" r="18" fill="none" stroke="white" stroke-width="3.5" />
-  </g>
-  
-  <!-- 右侧文字组 -->
-  <g transform="translate(250, 52)">
-    <text x="0" y="90" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="92" font-weight="700" fill="white" letter-spacing="8">BOS</text>
-    <text x="0" y="140" font-family="Arial, 'Helvetica Neue', Helvetica, sans-serif" font-size="16" font-weight="400" fill="white" opacity="0.9">Basic Operating System</text>
-    <!-- 线长缩短至 215，右端坐标 465，在蓝色背景内（右边界480） -->
-    <line x1="0" y1="152" x2="215" y2="152" stroke="white" stroke-width="1.5" />
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 240" width="280" height="240">
+  <defs>
+    <!-- 核心渐变 -->
+    <radialGradient id="coreGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4a9eff" />
+      <stop offset="70%" stop-color="#1a5cb0" />
+      <stop offset="100%" stop-color="#0d2b4d" />
+    </radialGradient>
+    <!-- 圆环下半部分（近处，亮，粗） -->
+    <linearGradient id="ringLowerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3a8cff" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#7abaff" stop-opacity="0.95" />
+    </linearGradient>
+    <!-- 圆环上半部分（远处，暗，细） -->
+    <linearGradient id="ringUpperGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a5cb0" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#4a9eff" stop-opacity="0.6" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 背景透明 -->
+
+  <!-- 圆环上半部分（远处，先画，会被核心遮挡）-->
+  <path d="M 45,120 A 95,28 0 0,1 235,120" fill="none" stroke="url(#ringUpperGrad)" stroke-width="3" opacity="0.7" transform="rotate(-10 140 120)"/>
+  <path d="M 60,120 A 80,22 0 0,1 220,120" fill="none" stroke="#4a9eff" stroke-width="1" stroke-dasharray="6 4" opacity="0.5" transform="rotate(-10 140 120)"/>
+
+  <!-- 核心：正六边形（内核）-->
+  <polygon points="140,45 189,81 189,159 140,195 91,159 91,81" fill="url(#coreGrad)" filter="url(#shadow)" stroke="#4a9eff" stroke-width="2.5"/>
+
+  <!-- 嵌套六边形 -->
+  <polygon points="140,67 174,92 174,148 140,173 106,148 106,92" fill="none" stroke="#7abaff" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.8"/>
+
+  <!-- 中心文字 BOS -->
+  <text x="140" y="130" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="38" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="3" filter="url(#glow)">BOS</text>
+
+  <!-- 圆环下半部分（近处，后画，覆盖核心）-->
+  <path d="M 45,120 A 95,28 0 0,0 235,120" fill="none" stroke="url(#ringLowerGrad)" stroke-width="5" opacity="0.95" transform="rotate(-10 140 120)"/>
+  <path d="M 60,120 A 80,22 0 0,0 220,120" fill="none" stroke="#7abaff" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.8" transform="rotate(-10 140 120)"/>
+
+  <!-- 底部文字 -->
+  <text x="140" y="225" font-family="monospace" font-size="15" font-weight="bold" fill="#4a9eff" text-anchor="middle" letter-spacing="4" opacity="0.9">BOS UP</text>
 </svg>
