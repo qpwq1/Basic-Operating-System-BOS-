@@ -1,4 +1,4 @@
-BOS UP — Unusual Perfect Kernel
+BOS UP — New Version Kernel
 
 BOS UP 是一个运行在 TurboWarp 上的**操作系统内核**，具备完整的内存管理、进程管理、文件系统、系统调用和脚本语言（BM），并设计了一套简单但可扩展的消息协议（SCIO）。
 
