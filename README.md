@@ -52,6 +52,6 @@ BM::CPU(CONVERT 16, 10, FF);
 
 ---
 ```
-以下是我写的一些文章：
+参考：
 [早期SCIO 协议设想](https://www.bilibili.com/opus/1164306032705404933)
 [比较正式的SCIO 协议设想](https://www.bilibili.com/opus/1187999017941860372)
