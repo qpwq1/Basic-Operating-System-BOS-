@@ -1,4 +1,7 @@
 # BOS — 运行在TurboWarp的模拟操作系统内核 (New Version Kernel)
+<p align="center">
+  <img src="bos-logo.svg" width="120">
+</p>
 # BOS是什么？
 BOS 是一个运行在 TurboWarp 上的**操作系统内核**，具备完整的内存管理、进程管理、文件系统、系统调用和脚本语言（BM），并设计了一套简单但可扩展的消息协议（SCIO）。
 *请注意：BOS 是一个运行在 TurboWarp / Scratch 运行时环境上的操作系统**内核模拟 / 教学演示项目***，并不是一个可以引导裸机（x86 / RISC-V 等）的**真实操作系统内核**。
