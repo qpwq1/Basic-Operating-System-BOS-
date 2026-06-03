@@ -1,5 +1,7 @@
 # BOS — 运行在TurboWarp的模拟操作系统内核 (New Version Kernel)
-![bos-logo.svg](bos-logo.svg)
+<div align="center">
+  <img src="bos-logo.svg" width="200" alt="描述文字" />
+</div>
 
 
 # BOS是什么？
