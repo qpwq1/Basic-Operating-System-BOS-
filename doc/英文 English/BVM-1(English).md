@@ -247,10 +247,6 @@
 | AC | 000B | Read-only |
 | LSP | 000C | Read/Write |
 | RSP | 000D | Read/Write |
-| SS | 000E | Read-only |
-| ES | 000F | Read-only |
-| PC | 0010 | Read/Write |
-| IR | 0011 | Read-only |
 
 ---
 
