@@ -41,4 +41,4 @@ TurboBOS 是一个运行在 TurboWarp 上的 **操作系统内核** ，具备完
 请在使用各组件前，查看对应目录下的 LICENSE 文件。
 
 # 关于语言统计
-GitHub 自动将本仓库标记为 100% JavaScript，是因为只识别到了扩展部分的 JS 文件(.js)。BOS 的实际内核逻辑主要存在于 *.sb3/.sprite* 文件中（Scratch / TurboWarp 项目格式）,其底层是 TurboWarp 虚拟机和积木块逻辑，而非纯 JS 内核。
+GitHub 自动将本仓库标记为 HTML 与 JavaScript，是因为只识别到了扩展部分的 JS 文件(.js)。BOS 的实际内核逻辑主要存在于 *.sb3/.sprite* 文件中（Scratch / TurboWarp 项目格式）,其底层是 TurboWarp 虚拟机和积木块逻辑，而非纯 JS 内核。
