@@ -169,6 +169,66 @@
 
 ---
 
+## 位运算指令
+
+### AND — 按位与
+- **操作码**：`0x0010`
+- **格式**：`AND dest, src`
+- **长度**：6 字节
+- **行为**：`reg[dest] = reg[dest] & reg[src]`
+- **示例**：`AND AR, BR`
+
+### OR — 按位或
+- **操作码**：`0x0012`
+- **格式**：`OR dest, src`
+- **长度**：6 字节
+- **行为**：`reg[dest] = reg[dest] | reg[src]`
+- **示例**：`OR AR, BR`
+
+### NOT — 按位非
+- **操作码**：`0x0013`
+- **格式**：`NOT dest`
+- **长度**：6 字节
+- **行为**：`reg[dest] = ~reg[dest]`
+- **示例**：`NOT AR`
+
+### XOR — 按位异或
+- **操作码**：`0x0016`
+- **格式**：`XOR dest, src`
+- **长度**：6 字节
+- **行为**：`reg[dest] = reg[dest] ^ reg[src]`
+- **示例**：`XOR AR, BR`
+
+### XNOR — 按位同或
+- **操作码**：`0x0017`
+- **格式**：`XNOR dest, src`
+- **长度**：6 字节
+- **行为**：`reg[dest] = ~(reg[dest] ^ reg[src])`
+- **示例**：`XNOR AR, BR`
+
+### CMP — 比较
+- **操作码**：`0x000F`
+- **格式**：`CMP dest, src`
+- **长度**：6 字节
+- **行为**：计算 `reg[dest] - reg[src]`，仅更新标志位（`AZ`、`AE`、`AC`）
+- **示例**：`CMP AR, BR`
+
+### SHL — 逻辑左移
+- **操作码**：`0x000D`
+- **格式**：`SHL dest, src`
+- **长度**：6 字节
+- **行为**：`reg[dest] = reg[dest] << reg[src]`
+- **示例**：`SHL AR, BR`
+
+### SHR — 逻辑右移
+- **操作码**：`0x000E`
+- **格式**：`SHR dest, src`
+- **长度**：6 字节
+- **行为**：`reg[dest] = reg[dest] >> reg[src]`
+- **示例**：`SHR AR, BR`
+
+---
+
 ## 系统指令
 
 ### SYSCALL — 系统调用
