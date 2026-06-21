@@ -6,7 +6,7 @@
 - **2-byte instructions**: `[opcode]` (no operands)
 
 ## Opcode Table
-| Hex Opcode | Decimal | Binary Opcode | Mnemonic | Length |
+| Hex Opcode | Decimal | Binary Opcode | Mnemonic | Length（byte） |
 | --- | --- | --- | --- | --- |
 | 0000 | 0 | 0000 0000 0000 0000 | MOV | 6 |
 | 0001 | 1 | 0000 0000 0000 0001 | ADD | 6 |
