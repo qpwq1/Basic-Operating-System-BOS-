@@ -2,35 +2,35 @@
 
 ## Instruction Format
 - **6-byte instructions**: `[opcode] [dest] [src]` (each field 2 bytes)
-- **4-byte instructions**: `[opcode] [addr]` (jumps and stack operations)
+- **4-byte instructions**: `[opcode] [addr]` (jumps, stack ops)
 - **2-byte instructions**: `[opcode]` (no operands)
 
 ## Opcode Table
-| Hex Opcode | Decimal | Binary Opcode | Mnemonic |
-|------------|---------|---------------|----------|
-| 0000 | 0 | 0000 0000 0000 0000 | MOV |
-| 0001 | 1 | 0000 0000 0000 0001 | ADD |
-| 0002 | 2 | 0000 0000 0000 0010 | SUB |
-| 0003 | 3 | 0000 0000 0000 0011 | MUL |
-| 0004 | 4 | 0000 0000 0000 0100 | DIV |
-| 0005 | 5 | 0000 0000 0000 0101 | SYSCALL |
-| 0006 | 6 | 0000 0000 0000 0110 | JMP |
-| 0007 | 7 | 0000 0000 0000 0111 | JZ |
-| 0008 | 8 | 0000 0000 0000 1000 | JNZ |
-| 0009 | 9 | 0000 0000 0000 1001 | JE |
-| 000A | 10 | 0000 0000 0000 1010 | JNE |
-| 000B | 11 | 0000 0000 0000 1011 | JC |
-| 000C | 12 | 0000 0000 0000 1100 | JNC |
-| 000D | 13 | 0000 0000 0000 1101 | SHL |
-| 000E | 14 | 0000 0000 0000 1110 | SHR |
-| 000F | 15 | 0000 0000 0000 1111 | CMP |
-| 0010 | 16 | 0000 0000 0001 0000 | AND |
-| 0012 | 18 | 0000 0000 0001 0010 | OR |
-| 0013 | 19 | 0000 0000 0001 0011 | NOT |
-| 0014 | 20 | 0000 0000 0001 0100 | MOVR |
-| 0015 | 21 | 0000 0000 0001 0101 | NOP |
-| 0016 | 22 | 0000 0000 0001 0110 | XOR |
-| 0017 | 23 | 0000 0000 0001 0111 | XNOR |
+| Hex Opcode | Decimal | Binary Opcode | Mnemonic | Length |
+| --- | --- | --- | --- | --- |
+| 0000 | 0 | 0000 0000 0000 0000 | MOV | 6 |
+| 0001 | 1 | 0000 0000 0000 0001 | ADD | 6 |
+| 0002 | 2 | 0000 0000 0000 0010 | SUB | 6 |
+| 0003 | 3 | 0000 0000 0000 0011 | MUL | 6 |
+| 0004 | 4 | 0000 0000 0000 0100 | DIV | 6 |
+| 0005 | 5 | 0000 0000 0000 0101 | SYSCALL | 2 |
+| 0006 | 6 | 0000 0000 0000 0110 | JMP | 4 |
+| 0007 | 7 | 0000 0000 0000 0111 | JZ | 4 |
+| 0008 | 8 | 0000 0000 0000 1000 | JNZ | 4 |
+| 0009 | 9 | 0000 0000 0000 1001 | JE | 4 |
+| 000A | 10 | 0000 0000 0000 1010 | JNE | 4 |
+| 000B | 11 | 0000 0000 0000 1011 | JC | 4 |
+| 000C | 12 | 0000 0000 0000 1100 | JNC | 4 |
+| 000D | 13 | 0000 0000 0000 1101 | SHL | 6 |
+| 000E | 14 | 0000 0000 0000 1110 | SHR | 6 |
+| 000F | 15 | 0000 0000 0000 1111 | CMP | 6 |
+| 0010 | 16 | 0000 0000 0001 0000 | AND | 6 |
+| 0012 | 18 | 0000 0000 0001 0010 | OR | 6 |
+| 0013 | 19 | 0000 0000 0001 0011 | NOT | 4 |
+| 0014 | 20 | 0000 0000 0001 0100 | MOVR | 6 |
+| 0015 | 21 | 0000 0000 0001 0101 | NOP | 2 |
+| 0016 | 22 | 0000 0000 0001 0110 | XOR | 6 |
+| 0017 | 23 | 0000 0000 0001 0111 | XNOR | 6 |
 
 ---
 
@@ -125,7 +125,7 @@
 - **Opcode**: `0x000F`
 - **Format**: `CMP dest, src`
 - **Length**: 6 bytes
-- **Operation**: Computes `reg[dest] - reg[src]` and updates flags (`AZ`, `AE`, `AC`) only
+- **Operation**: Computes `reg[dest] - reg[src]`, updates flags only (`AZ`, `AE`, `AC`)
 - **Example**: `CMP AR, BR`
 
 ### SHL — Shift Left
@@ -210,7 +210,7 @@
 - **Opcode**: `0x0015`
 - **Format**: `NOP`
 - **Length**: 2 bytes
-- **Operation**: Does nothing; yields CPU for cooperative scheduling
+- **Operation**: No operation; yields CPU for cooperative scheduling
 - **Example**: `NOP`
 
 ---
@@ -225,8 +225,9 @@
 ---
 
 ## Register Encoding
+
 | Register | Hex Code | Read/Write |
-|----------|----------|------------|
+| :--- | :--- | :--- |
 | AR | 0000 | R/W |
 | BR | 0001 | R/W |
 | CR | 0002 | R/W |
@@ -244,4 +245,4 @@
 
 ---
 
-*Document Version: 1.05 | Updated: 2026-06-20 | Author: qpwq1 (XaoDingx)*
+*Document Version: 1.1 | Updated: 2026-06-21 | Author: qpwq1 (XaoDingx)*
