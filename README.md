@@ -1,4 +1,4 @@
-# BOS — 运行在TurboWarp的模拟操作系统内核 (New Version Kernel)
+# BOS — 运行在TurboWarp的模拟操作系统内核
 *此版本为BOS的主要分支TurboBOS*
 <div align="center">
   <img src="bos-logo.svg" width="200" alt="描述文字" />
