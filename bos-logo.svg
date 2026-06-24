@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <polygon points="100,20 180,60 180,140 100,180 20,140 20,60" fill="none" stroke="#E67E22" stroke-width="6"/>
-  <polygon points="100,50 150,75 150,125 100,150 50,125 50,75" fill="#E67E22" opacity="0.1"/>
-  <text x="100" y="118" font-family="'Courier New', monospace" font-size="58" text-anchor="middle" fill="#2C3E50" font-weight="bold">B</text>
-</svg>
