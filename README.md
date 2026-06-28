@@ -38,7 +38,6 @@ TurboBOS-kernel/
 
 - 在线运行：[TurboWarp](https://turbowarp.org)
 - 使用方法：点击右下角「添加角色」，将 BOS 的 `.sprite3` 文件加载到项目中，即可查看源码。
-- 你也可以下载 BOS 内核的 `.sb3` 版本，在 TurboWarp 中离线运行。
 
 ---
 
